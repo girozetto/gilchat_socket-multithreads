@@ -6,14 +6,14 @@ import javax.swing.JTextArea;
 
 public class SeccaoMensagem extends JTextArea implements  Actualizacao{
     private Registro registro;
-    private String id;
+    private Cliente cliente;
     
-    public SeccaoMensagem(String id, Ficheiro ficheiro)
+    public SeccaoMensagem(Cliente cliente)
     {
         super();
-        this.id=id;
         registro = new Registro();
-        new EventoLer(ficheiro, this);
+        this.cliente = cliente;
+        cliente.iniciarEspera(this);
         this.repaint();
     }
 
@@ -23,19 +23,9 @@ public class SeccaoMensagem extends JTextArea implements  Actualizacao{
         System.out.println("Desenhando");
         setBackground(new Color(0xFF1E1E1E));
         Graphics2D g2d = (Graphics2D) g;
-        this.registro.desenhar(g2d,this.getBounds().width,this.getBounds().height, this.id, this);
+        this.registro.desenhar(g2d,this.getBounds().width,this.getBounds().height, this.cliente.getId(), this);
     }
 
-    
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    
     public Registro getRegistro() {
         return registro;
     }
@@ -45,14 +35,14 @@ public class SeccaoMensagem extends JTextArea implements  Actualizacao{
     }
 
     @Override
-    public void receber(Registro msgs) {
-        registro.unirRegistro(msgs);
-        this.repaint();
-    }
-
-    @Override
     public void redimensionar(int addAltura, int addLargura) {
         setPreferredSize(new Dimension(getWidth()+addLargura,getHeight()+addAltura));
         setText("escrevendo");
+    }
+
+    @Override
+    public void receber(Mensagem msg) {
+        registro.adicionar(msg);
+        this.repaint();
     }
 }

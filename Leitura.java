@@ -3,21 +3,26 @@ import java.io.IOException;
 import javax.swing.JOptionPane;
 
 public class Leitura implements Runnable{
-    private Ficheiro ficheiro;
+    private Cliente cliente;
     private Actualizacao act;
-    public Leitura(Ficheiro f, Actualizacao act)
+    private boolean interruptor;
+    public Leitura(Cliente cliente, Actualizacao act)
     {
         this.act=act;
-        this.ficheiro=f;
+        this.cliente=cliente;
+        this.interruptor = true;
     }
 
 
     @Override
     public void run() {
-        try {
-            act.receber(ficheiro.obterRegistros());
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(null, "Não foi possível Ler o Ficheiro");
+        while(interruptor){
+            try {
+                Mensagem ms = this.cliente.esperandoMensagem();
+                act.receber(ms);
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog(null, "Não foi possível processar a mensagem: "+e.toString());
+            }
         }
     }
 }

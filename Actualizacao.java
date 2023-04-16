@@ -1,4 +1,4 @@
 public interface Actualizacao {
-    void receber(Registro msgs);
+    void receber(Mensagem msg);
     void redimensionar(int addAltura, int addLargura);
 }

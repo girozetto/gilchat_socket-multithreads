@@ -12,23 +12,19 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
 public class EnvioGUI extends JFrame{
-    final public String F_BACKUP = "backchat.txt";
-    final public String F_BUFFER = "buffchat.txt";
-
-    private String id;
+    
     private SeccaoMensagem secmsg;
     private JTextField caixamsg;
-    private Ficheiro backup;
+    private Cliente backup;
 
-    public EnvioGUI(String id)
+    public EnvioGUI()
     {
-        super(id);
-        gerarFicheiros();
-        this.id = id;
-        secmsg = new SeccaoMensagem(id, this.backup);
+        super("Conectando...");
+        gerarConexoes();
+        secmsg = new SeccaoMensagem( this.backup );
         caixamsg = new JTextField();
 
-        
+        //Instanciaçao dos elementos
         JPanel painelInferior = new JPanel();
         JButton botaoEnviar = new JButton();
         JScrollPane jsp = new JScrollPane(secmsg, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
@@ -51,10 +47,12 @@ public class EnvioGUI extends JFrame{
         painelInferior.add(caixamsg, BorderLayout.CENTER);
         painelInferior.add(botaoEnviar, BorderLayout.EAST);
 
+        //Adicionar elementos a tela principal
         setLayout(new BorderLayout(0, 1));
         add(jsp, BorderLayout.CENTER);
         add(painelInferior,  BorderLayout.SOUTH);
 
+        //Definicao da tela principal
         setResizable(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -62,12 +60,16 @@ public class EnvioGUI extends JFrame{
         setVisible(true);
     }
 
-    private void gerarFicheiros()
+    private void gerarConexoes()
     {
         try{
-            backup = new Ficheiro(F_BACKUP);
+            backup = new Cliente();
+            Mensagem m = backup.esperandoMensagem();
+            backup.setId(m.getIdEmissor());
+            this.setTitle(backup.getId());
         }catch(IOException e){
-            JOptionPane.showMessageDialog(null, e+"Erro ao criar uma dos ficheiros");
+            JOptionPane.showMessageDialog(null, "Nao conseguiu se conectar ao servidor");
+            System.exit(0);
         }
     }
 
@@ -81,16 +83,8 @@ public class EnvioGUI extends JFrame{
 
     private void enviarMensagem(String msg)
     {
-        Escrita escrita = new Escrita(backup, new Mensagem(getId(), msg));
+        Escrita escrita = new Escrita(backup, new Mensagem(backup.getId(), msg));
         EscritaThread escThread = new EscritaThread(escrita);
         escThread.start();
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 }
