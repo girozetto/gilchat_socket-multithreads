@@ -9,7 +9,7 @@
 
 ## About <a name = "about"></a>
 
-A Project using Multithreading Concepts for making realtime communication between User's and file based storage.
+A Project using Multithreading, Client-Server and Sockets Concepts for making Realtime Communication between User's and a Server.
 
 ## Getting Started <a name = "getting_started"></a>
 
