@@ -9,7 +9,7 @@
 
 ## About <a name = "about"></a>
 
-A Project using Multithreading, Client-Server and Sockets Concepts for making Realtime Communication between User's and a Server.
+A Project using Multithreading, Client-Server and Sockets Concepts for making Realtime Communication between User's(TelaGUI) and a Server(ServidorPrincipal).
 
 ## Getting Started <a name = "getting_started"></a>
 
@@ -28,7 +28,9 @@ Just compile all .java files
 
 And then
 
-Execute TelaGUI.java
+Firstly, executes ServidorPrincipal class for server running on your local machine
+
+Execute TelaGUI.java for Client side
 
 ## Usage <a name = "usage"></a>
 
